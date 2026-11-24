@@ -1,0 +1,115 @@
+---
+import { resolveVisibleContact } from '../lib/seo-generators.ts';
+import type { AuthorConfig } from '../lib/types.ts';
+
+interface Props {
+  author: AuthorConfig;
+}
+
+const { author } = Astro.props;
+const visibleContact = resolveVisibleContact(author);
+---
+
+<section id="profile" class="section-block" aria-labelledby="profile-heading">
+  <div class="section-head">
+    <div>
+      <span class="section-index">02 // Principal Profile &amp; Engineering Practice</span>
+      <h2 id="profile-heading" class="section-title">
+        {author.headlineRole}
+      </h2>
+    </div>
+    <p class="section-subtitle">
+      Architecting deterministic low-latency systems, trading &amp; market-data infrastructure,
+      quantitative analytics pipelines, and production-grade multi-platform delivery.
+    </p>
+  </div>
+
+  <div class="pillars-grid">
+    {
+      author.pillars.map((pillar) => (
+        <article class="monolith-card pillar-card">
+          <div>
+            <span class="pillar-code">{pillar.code}</span>
+            <h3 class="pillar-title">{pillar.title}</h3>
+            <p class="pillar-desc">{pillar.description}</p>
+          </div>
+
+          <div class="chip-row">
+            {pillar.tags.map((tag) => (
+              <span class="spec-chip">{tag}</span>
+            ))}
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <div class="monolith-card profile-contact-bar">
+    <div class="profile-contact-copy">
+      <span class="profile-contact-kicker">Direct Channels</span>
+      <p class="profile-contact-text">
+        Available for architectural consulting, engineering leadership, and{' '}
+        <strong>trading &amp; real-time platform</strong> initiatives.
+      </p>
+    </div>
+
+    <div class="profile-contact-actions">
+      {
+        visibleContact.email ? (
+          <>
+            <a
+              href={`mailto:${visibleContact.email}`}
+              class="btn-primary profile-contact-btn"
+              data-contact-slot="email"
+            >
+              Email {visibleContact.email} ✉
+            </a>
+            <button
+              type="button"
+              class="copy-btn profile-copy-email"
+              data-copy={visibleContact.email}
+              aria-label={`Copy email address ${visibleContact.email}`}
+            >
+              Copy Email
+            </button>
+          </>
+        ) : (
+          <span
+            class="profile-contact-slot is-invisible"
+            data-contact-slot="email"
+            hidden
+            aria-hidden="true"
+          >
+            Email
+          </span>
+        )
+      }
+
+      {
+        visibleContact.linkedinUrl ? (
+          <a
+            href={visibleContact.linkedinUrl}
+            class="btn-secondary profile-contact-btn"
+            rel="noopener"
+            data-contact-slot="linkedin"
+          >
+            LinkedIn ↗
+          </a>
+        ) : (
+          <span
+            class="profile-contact-slot is-invisible"
+            data-contact-slot="linkedin"
+            hidden
+            aria-hidden="true"
+          >
+            LinkedIn
+          </span>
+        )
+      }
+
+      <a href={author.githubUrl} class="btn-secondary profile-contact-btn" rel="noopener">
+        GitHub @{author.handle} ↗
+      </a>
+    </div>
+  </div>
+</section>

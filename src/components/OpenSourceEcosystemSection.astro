@@ -1,0 +1,358 @@
+---
+import type { OpenSourceProject } from '../lib/types.ts';
+
+interface Props {
+  projects: OpenSourceProject[];
+}
+
+const { projects } = Astro.props;
+const mainProjects = projects.filter((p) => p.tier === 'main');
+const secondaryProjects = projects.filter((p) => p.tier === 'secondary');
+const utilityProjects = projects.filter((p) => p.tier === 'utility');
+---
+
+<section id="open-source" class="section-block" aria-labelledby="oss-heading">
+  <div class="section-head">
+    <div>
+      <span class="section-index">03 // Open-Source Ecosystem</span>
+      <h2 id="oss-heading" class="section-title">
+        Flagship Open-Source Libraries &amp; Native Tools
+      </h2>
+    </div>
+    <p class="section-subtitle">
+      Battle-tested audio loopback engines, desktop layout utilities, and multiplatform cryptography
+      bindings under <code>github.com/s0d3s</code>.
+    </p>
+  </div>
+
+  <!-- TIER A: 6 + 6 Co-Main Flagship Repositories -->
+  {
+    mainProjects.length > 0 && (
+      <div class="oss-main-grid">
+        {mainProjects.map((project) => {
+          const primaryHref = project.homepageUrl || project.repoUrl;
+          const isAnimDemo = project.visual?.kind === 'animated-demo';
+          const isCodeStage = project.visual?.kind === 'code-stage';
+          const demoWidth = project.visual?.width ?? 250;
+          const demoHeight = project.visual?.height ?? 300;
+          const posterAvif = `/generated/oss/${project.mediaSlug}-poster.avif`;
+          const posterWebp = `/generated/oss/${project.mediaSlug}-poster.webp`;
+          const animWebp = `/generated/oss/${project.mediaSlug}-anim.webp`;
+
+          return (
+            <article
+              class:list={[
+                'monolith-card',
+                'oss-main-card',
+                { 'oss-main-split': isAnimDemo },
+              ]}
+            >
+              {isAnimDemo ? (
+                <>
+                  <div class="oss-demo-bezel-col">
+                    <div
+                      class="oss-anim-stage"
+                      data-anim-stage
+                      data-anim-src={animWebp}
+                      data-poster-src={posterWebp}
+                    >
+                      <div class="oss-window-bar" aria-hidden="true">
+                        <span class="win-dot"></span>
+                        <span class="win-dot"></span>
+                        <span class="win-dot win-dot-amber"></span>
+                        <span class="win-caption">Positioner.exe · Live UI</span>
+                      </div>
+
+                      <div class="oss-anim-viewport">
+                        <picture>
+                          <source type="image/avif" srcset={posterAvif} />
+                          <source type="image/webp" srcset={posterWebp} />
+                          <img
+                            src={posterWebp}
+                            width={demoWidth}
+                            height={demoHeight}
+                            alt={
+                              project.visual?.alt ??
+                              `${project.name} interactive desktop utility preview`
+                            }
+                            loading="lazy"
+                            decoding="async"
+                            class="oss-anim-img"
+                          />
+                        </picture>
+                        <button
+                          type="button"
+                          class="oss-anim-toggle"
+                          data-anim-toggle
+                          aria-label={`Play or pause ${project.name} animated preview`}
+                          title="Toggle live animation"
+                        >
+                          Live
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="oss-main-content">
+                    <div>
+                      <div class="bento-header">
+                        <h3 class="bento-title">
+                          <a href={primaryHref} rel="noopener">
+                            {project.name}
+                          </a>
+                        </h3>
+
+                        <div class="bento-meta-pills">
+                          {project.primaryLanguage && (
+                            <span class="lang-pill">{project.primaryLanguage}</span>
+                          )}
+                          {project.stars >= 10 && (
+                            <span class="star-pill" title={`${project.stars} GitHub stars`}>
+                              ★ {project.stars}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {project.metricBadge && (
+                        <span class="bento-metric-banner">{project.metricBadge}</span>
+                      )}
+
+                      <p class="bento-desc">{project.description}</p>
+                    </div>
+
+                    {project.visual?.stageMetrics && (
+                      <div class="chip-row">
+                        {project.visual.stageMetrics.map((m) => (
+                          <span class="spec-chip">{m}</span>
+                        ))}
+                      </div>
+                    )}
+
+                    <div class="oss-card-bottom">
+                      {project.successorNote &&
+                        project.successorDocsUrl &&
+                        project.successorRepo && (
+                          <div class="successor-callout">
+                            {project.successorNote}{' '}
+                            <a href={project.successorDocsUrl}>
+                              Explore {project.successorRepo} →
+                            </a>
+                          </div>
+                        )}
+
+                      <div class="bento-footer">
+                        <a href={project.repoUrl} class="bento-link" rel="noopener">
+                          github.com/s0d3s/{project.name} ↗
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div class="oss-main-stack">
+                  <div>
+                    <div class="bento-header">
+                      <h3 class="bento-title">
+                        <a href={primaryHref} rel="noopener">
+                          {project.name}
+                        </a>
+                      </h3>
+
+                      <div class="bento-meta-pills">
+                        {project.primaryLanguage && (
+                          <span class="lang-pill">{project.primaryLanguage}</span>
+                        )}
+                        {project.stars >= 10 && (
+                          <span class="star-pill" title={`${project.stars} GitHub stars`}>
+                            ★ {project.stars}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {project.metricBadge && (
+                      <span class="bento-metric-banner">{project.metricBadge}</span>
+                    )}
+
+                    <p class="bento-desc">{project.description}</p>
+                  </div>
+
+                  {isCodeStage && project.visual?.stageCode && (
+                    <div class="oss-code-stage" aria-label={`${project.name} usage blueprint`}>
+                      <div class="oss-window-bar" aria-hidden="true">
+                        <span class="win-dot"></span>
+                        <span class="win-dot"></span>
+                        <span class="win-dot win-dot-amber"></span>
+                        <span class="win-caption">
+                          {project.visual.stageTitle ?? `${project.name} loopback`}
+                        </span>
+                      </div>
+                      <pre class="oss-code-pre"><code>{project.visual.stageCode.join('\n')}</code></pre>
+                      {project.visual.stageMetrics && (
+                        <div class="oss-stage-chips">
+                          {project.visual.stageMetrics.map((m) => (
+                            <span class="oss-stage-chip">{m}</span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {project.installCommand && (
+                    <div class="install-box">
+                      <code class="install-cmd">
+                        <span class="install-prompt">$</span>
+                        {project.installCommand}
+                      </code>
+                      <button
+                        type="button"
+                        class="copy-btn"
+                        data-copy={project.installCommand}
+                        aria-label={`Copy ${project.installCommand}`}
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  )}
+
+                  <div class="oss-card-bottom">
+                    {project.successorNote &&
+                      project.successorDocsUrl &&
+                      project.successorRepo && (
+                        <div class="successor-callout">
+                          {project.successorNote}{' '}
+                          <a href={project.successorDocsUrl}>
+                            Explore {project.successorRepo} →
+                          </a>
+                        </div>
+                      )}
+
+                    <div class="bento-footer">
+                      <a href={project.repoUrl} class="bento-link" rel="noopener">
+                        github.com/s0d3s/{project.name} ↗
+                      </a>
+                      {project.registries.pypi && (
+                        <a href={project.registries.pypi.url} class="badge-registry" rel="noopener">
+                          PyPI {project.registries.pypi.version} ↗
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </article>
+          );
+        })}
+      </div>
+    )
+  }
+
+  <!-- TIER B: Featured Secondary Project(s) With Wide Banner -->
+  {
+    secondaryProjects.length > 0 && (
+      <div class="oss-secondary-stack">
+        {secondaryProjects.map((project) => {
+          const primaryHref = project.homepageUrl || project.repoUrl;
+          const hasBanner = project.visual?.kind === 'banner';
+          const bannerAvifSrcset = `/generated/oss/${project.mediaSlug}-360.avif 360w, /generated/oss/${project.mediaSlug}-640.avif 640w`;
+          const bannerWebpSrcset = `/generated/oss/${project.mediaSlug}-360.webp 360w, /generated/oss/${project.mediaSlug}-640.webp 640w`;
+          const bannerFallback = `/generated/oss/${project.mediaSlug}-640.webp`;
+
+          return (
+            <article class="monolith-card oss-secondary-card">
+              {hasBanner && (
+                <a href={primaryHref} class="oss-banner-frame" rel="noopener">
+                  <picture>
+                    <source
+                      type="image/avif"
+                      srcset={bannerAvifSrcset}
+                      sizes="(max-width: 820px) 92vw, 320px"
+                    />
+                    <source
+                      type="image/webp"
+                      srcset={bannerWebpSrcset}
+                      sizes="(max-width: 820px) 92vw, 320px"
+                    />
+                    <img
+                      src={bannerFallback}
+                      width={project.visual?.width ?? 640}
+                      height={project.visual?.height ?? 284}
+                      alt={project.visual?.alt ?? `${project.name} repository banner`}
+                      loading="lazy"
+                      decoding="async"
+                      class="oss-banner-img"
+                    />
+                  </picture>
+                </a>
+              )}
+
+              <div class="oss-secondary-body">
+                <div>
+                  <div class="bento-header">
+                    <h3 class="bento-title">
+                      <a href={primaryHref} rel="noopener">
+                        {project.name}
+                      </a>
+                    </h3>
+
+                    <div class="bento-meta-pills">
+                      {project.primaryLanguage && (
+                        <span class="lang-pill">{project.primaryLanguage}</span>
+                      )}
+                      {project.stars >= 10 && (
+                        <span class="star-pill" title={`${project.stars} GitHub stars`}>
+                          ★ {project.stars}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {project.metricBadge && (
+                    <span class="bento-metric-banner">{project.metricBadge}</span>
+                  )}
+
+                  <p class="bento-desc">{project.description}</p>
+                </div>
+
+                <div class="bento-footer">
+                  <a href={project.repoUrl} class="bento-link" rel="noopener">
+                    github.com/s0d3s/{project.name} ↗
+                  </a>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    )
+  }
+
+  <!-- TIER C: Low-Priority Compact Utility Strip -->
+  {
+    utilityProjects.length > 0 && (
+      <div class="monolith-card oss-utility-strip" aria-label="Additional utilities">
+        <span class="oss-utility-kicker">Additional Open-Source Utility</span>
+        <div class="oss-utility-list">
+          {utilityProjects.map((project) => (
+            <div class="oss-utility-row">
+              <div class="oss-utility-main">
+                <a href={project.repoUrl} class="oss-utility-name" rel="noopener">
+                  {project.name}
+                </a>
+                {project.primaryLanguage && (
+                  <span class="lang-pill">{project.primaryLanguage}</span>
+                )}
+                <span class="oss-utility-desc">{project.description}</span>
+              </div>
+
+              <a href={project.repoUrl} class="bento-link" rel="noopener">
+                Repository ↗
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+</section>

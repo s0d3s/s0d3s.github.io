@@ -1,0 +1,39 @@
+{
+  "name": "s0d3s-github-io",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Domain-root portfolio, automatic nested project discovery, and unified SEO/GEO sitemap, robots.txt, and llms.txt hub for https://s0d3s.github.io/",
+  "license": "MIT OR Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=26.0.0"
+  },
+  "scripts": {
+    "sync:catalog": "node ./scripts/sync-catalog.mjs",
+    "sync:dynamic": "node ./scripts/sync-dynamic.mjs",
+    "sync": "npm run sync:catalog",
+    "generate:favicons": "node ./scripts/generate-favicons.mjs",
+    "prepare:assets": "node ./scripts/prepare-assets.mjs",
+    "predev": "node ./scripts/prepare-assets.mjs",
+    "dev": "astro dev",
+    "build:bundle": "node ./scripts/prepare-assets.mjs && astro build",
+    "build:only": "npm run build:bundle",
+    "build": "node ./scripts/sync-dynamic.mjs --fallback-on-offline && npm run build:bundle",
+    "build:offline": "node -e \"import('node:child_process').then(({execSync})=>execSync('npm run build:bundle',{stdio:'inherit',env:{...process.env,IGNORE_DYNAMIC_TELEMETRY:'1'}}))\"",
+    "verify": "node ./scripts/verify-built-site.mjs --dist dist",
+    "check": "biome check . && astro sync && tsc --noEmit",
+    "test": "vitest run",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^7.4.13",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.6.8",
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.1"
+  }
+}

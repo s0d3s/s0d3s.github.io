@@ -1,0 +1,355 @@
+---
+import OpenSourceEcosystemSection from '../components/OpenSourceEcosystemSection.astro';
+import PortalShowcaseCard from '../components/PortalShowcaseCard.astro';
+import PrincipalProfileSection from '../components/PrincipalProfileSection.astro';
+import TechnicalMatrixSection from '../components/TechnicalMatrixSection.astro';
+import { generateLandingJsonLdGraph, resolveVisibleContact } from '../lib/seo-generators.ts';
+import { buildTechnicalIndex, loadDiscoverySnapshot } from '../lib/snapshot.ts';
+import '../styles/global.css';
+
+const snapshot = loadDiscoverySnapshot();
+const technicalIndex = buildTechnicalIndex(snapshot);
+const visibleContact = resolveVisibleContact(snapshot.author);
+const siteOrigin = snapshot.siteOrigin.replace(/\/$/, '');
+const canonicalUrl = `${siteOrigin}/`;
+const ogImageUrl = `${siteOrigin}/og-card-1280x640.png`;
+
+const pageTitle = 'SoDeS (@s0d3s) — Systems & Trading Platform Architect · Native OSS';
+const pageDescription =
+  'Systems, Trading Platform & DevOps Architect, Team Lead, and Quant Data Scientist — zero-overhead Rust, C++, Python & full-stack web systems.';
+
+const jsonLdPayload = JSON.stringify(generateLandingJsonLdGraph(snapshot));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#050507" />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="author" content={`${snapshot.author.name} (@${snapshot.author.handle})`} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.ico" sizes="48x48 96x96" />
+    <link rel="icon" type="image/png" href="/favicon-48x48.png" sizes="48x48" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="/favicon-192x192.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" type="application/xml" href={`${siteOrigin}/sitemap-index.xml`} />
+    <link
+      rel="alternate"
+      type="text/plain"
+      href={`${siteOrigin}/llms.txt`}
+      title="LLM Documentation Router"
+    />
+    <link
+      rel="alternate"
+      type="text/plain"
+      href={`${siteOrigin}/llms-full.txt`}
+      title="Full Portfolio LLM Dossier"
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="s0d3s.github.io" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="640" />
+    <meta
+      property="og:image:alt"
+      content="SoDeS (@s0d3s) — Systems, Trading Platform & DevOps Architect, Team Lead, and Quantitative Data Scientist"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <script type="application/ld+json" set:html={jsonLdPayload} />
+  </head>
+
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div class="abyss-backdrop" aria-hidden="true">
+      <div class="abyss-grid"></div>
+      <div class="abyss-aura"></div>
+    </div>
+
+    <div class="page-shell">
+      <header class="site-header">
+        <div class="container header-inner">
+          <a href="/" class="brand-link" aria-label="s0d3s.github.io home">
+            <picture>
+              <source type="image/webp" srcset="/generated/brand-mark-64.webp" />
+              <img
+                src="/generated/brand-mark-64.png"
+                alt=""
+                width="30"
+                height="30"
+                class="brand-mark"
+                aria-hidden="true"
+              />
+            </picture>
+            <span class="brand-domain">
+              s0d3s<span class="brand-tld">.github.io</span>
+            </span>
+          </a>
+
+          <nav class="header-nav" aria-label="Primary navigation">
+            <a href="#portals" class="nav-link">Portals</a>
+            <a href="#profile" class="nav-link">Profile</a>
+            <a href="#open-source" class="nav-link">Open Source</a>
+            <a href="#technical-index" class="nav-link">Matrix</a>
+            <a href={snapshot.author.githubUrl} class="nav-cta" rel="noopener">
+              GitHub @{snapshot.author.handle} ↗
+            </a>
+          </nav>
+        </div>
+      </header>
+
+      <main id="main-content" class="container">
+        <section class="hero" aria-labelledby="hero-heading">
+          <div class="hero-eyebrow">
+            <span class="pulse-dot" aria-hidden="true"></span>
+            <span>{snapshot.author.headlineRole}</span>
+          </div>
+
+          <h1 id="hero-heading" class="hero-title">
+            {snapshot.author.name} (@{snapshot.author.handle})
+            <span class="hero-title-accent">{snapshot.author.tagline}</span>
+          </h1>
+
+          {
+            snapshot.author.rolePills.length > 0 && (
+              <ul class="hero-role-strip" aria-label="Core engineering roles and domains">
+                {snapshot.author.rolePills.map((pill) => (
+                  <li class="hero-role-pill">{pill}</li>
+                ))}
+              </ul>
+            )
+          }
+
+          <p class="hero-lead">
+            Systems, Trading Platform, and DevOps Architect, Engineering Team Lead, and Quantitative
+            Data Scientist building deterministic low-latency execution engines, native
+            Rust/C++/Python infrastructure, and full-stack web platforms — creator of{' '}
+            <strong>capture-system-or-process-audio</strong>, <strong>PyAudioWPatch</strong>,{' '}
+            <strong>rusty-desktop-icons</strong>, and <strong>Positioner</strong>.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#portals" class="btn-primary">Explore Documentation Portals ↓</a>
+            <a href="#profile" class="btn-secondary">Principal Profile ↓</a>
+            <a href={snapshot.author.githubUrl} class="btn-secondary" rel="noopener">
+              GitHub Profile ↗
+            </a>
+            <a href={snapshot.author.pypiUrl} class="btn-secondary" rel="noopener">
+              PyPI Packages ↗
+            </a>
+            <a href={snapshot.author.cratesIoUrl} class="btn-secondary" rel="noopener">
+              crates.io ↗
+            </a>
+            {
+              visibleContact.linkedinUrl ? (
+                <a
+                  href={visibleContact.linkedinUrl}
+                  class="btn-secondary"
+                  rel="noopener"
+                  data-hero-slot="linkedin"
+                >
+                  LinkedIn ↗
+                </a>
+              ) : (
+                <span
+                  class="is-invisible"
+                  data-hero-slot="linkedin"
+                  hidden
+                  aria-hidden="true"
+                >
+                  LinkedIn
+                </span>
+              )
+            }
+          </div>
+
+          {
+            snapshot.author.theses && snapshot.author.theses.length > 0 && (
+              <div class="telemetry-strip" role="region" aria-label="Engineering highlights">
+                {snapshot.author.theses.map((item) => (
+                  <div class="telemetry-cell">
+                    <span class="telemetry-value">{item.valuePrefix}<span>{item.valueAccent}</span></span>
+                    <span class="telemetry-label">{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            )
+          }
+        </section>
+
+        <section id="portals" class="section-block" aria-labelledby="portals-heading">
+          <div class="section-head">
+            <div>
+              <span class="section-index">01 // Flagship Documentation Portals</span>
+              <h2 id="portals-heading" class="section-title">
+                Production Systems &amp; SDK Documentation
+              </h2>
+            </div>
+            <p class="section-subtitle">
+              Architecture specifications, multi-language handbooks, and complete API references for
+              cross-platform native libraries.
+            </p>
+          </div>
+
+          <div class="portals-stack">
+            {
+              snapshot.hostedPortals.map((portal, idx) => (
+                <PortalShowcaseCard portal={portal} eager={idx === 0} />
+              ))
+            }
+          </div>
+        </section>
+
+        <PrincipalProfileSection author={snapshot.author} />
+
+        <OpenSourceEcosystemSection projects={snapshot.openSourceProjects} />
+
+        <TechnicalMatrixSection data={technicalIndex} />
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <span>
+            © {new Date().getUTCFullYear()} {snapshot.author.name} (@{snapshot.author.handle}) ·
+            Dual-licensed MIT / Apache-2.0
+          </span>
+
+          <div class="footer-links">
+            <a href="/sitemap-index.xml">Sitemap</a>
+            <a href="/robots.txt">robots.txt</a>
+            {visibleContact.email && <a href={`mailto:${visibleContact.email}`}>Email</a>}
+            {
+              visibleContact.linkedinUrl ? (
+                <a href={visibleContact.linkedinUrl} rel="noopener">
+                  LinkedIn
+                </a>
+              ) : (
+                <span class="is-invisible" data-footer-slot="linkedin" hidden aria-hidden="true">
+                  LinkedIn
+                </span>
+              )
+            }
+            <a href="/llms.txt">llms.txt</a>
+            <a href="/llms-full.txt">llms-full.txt</a>
+            <a href={snapshot.author.githubUrl} rel="noopener">GitHub</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script is:inline>
+      document.addEventListener('click', (ev) => {
+        const target = ev.target;
+        if (!(target instanceof HTMLElement)) return;
+
+        const animBtn = target.closest('[data-anim-toggle]');
+        if (animBtn instanceof HTMLButtonElement) {
+          const stage = animBtn.closest('[data-anim-stage]');
+          if (stage instanceof HTMLElement) {
+            const isPlaying = stage.getAttribute('data-playing') === 'true';
+            const nextState = !isPlaying;
+            const src = stage.getAttribute(nextState ? 'data-anim-src' : 'data-poster-src');
+            if (src) {
+              stage.querySelectorAll('source').forEach((s) => s.setAttribute('srcset', src));
+              const img = stage.querySelector('img');
+              if (img) img.src = src;
+              stage.setAttribute('data-playing', String(nextState));
+              animBtn.textContent = nextState ? 'Pause' : 'Play';
+            }
+          }
+          return;
+        }
+
+        const btn = target.closest('.copy-btn');
+        if (!(btn instanceof HTMLButtonElement)) return;
+        const text = btn.getAttribute('data-copy');
+        if (!text || !navigator.clipboard) return;
+        navigator.clipboard.writeText(text).then(() => {
+          const prev = btn.textContent;
+          btn.setAttribute('data-copied', 'true');
+          btn.textContent = 'Copied';
+          setTimeout(() => {
+            btn.removeAttribute('data-copied');
+            btn.textContent = prev || 'Copy';
+          }, 1600);
+        });
+      });
+
+      // Zero-Lighthouse-impact progressive animated WebP hydration:
+      // Activates only after window load + idle AND viewport intersection (unless reduced-motion or Save-Data).
+      const initDeferredAnimations = () => {
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const saveData = Boolean(navigator.connection && navigator.connection.saveData);
+        const stages = document.querySelectorAll('[data-anim-stage]');
+
+        if (prefersReduced || saveData) {
+          stages.forEach((s) => {
+            const b = s.querySelector('[data-anim-toggle]');
+            if (b) b.textContent = 'Play';
+          });
+          return;
+        }
+
+        if (!('IntersectionObserver' in window)) return;
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              const stage = entry.target;
+              observer.unobserve(stage);
+              if (!(stage instanceof HTMLElement)) continue;
+              const animSrc = stage.getAttribute('data-anim-src');
+              if (!animSrc) continue;
+
+              const preloader = new Image();
+              preloader.onload = () => {
+                stage.querySelectorAll('source').forEach((s) => s.setAttribute('srcset', animSrc));
+                const img = stage.querySelector('img');
+                if (img) img.src = animSrc;
+                stage.setAttribute('data-playing', 'true');
+                const btn = stage.querySelector('[data-anim-toggle]');
+                if (btn) btn.textContent = 'Pause';
+              };
+              preloader.src = animSrc;
+            }
+          },
+          { rootMargin: '120px 0px' },
+        );
+
+        stages.forEach((stage) => observer.observe(stage));
+      };
+
+      const scheduleIdleAnimations = () => {
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(initDeferredAnimations, { timeout: 2000 });
+        } else {
+          setTimeout(initDeferredAnimations, 400);
+        }
+      };
+
+      if (document.readyState === 'complete') {
+        scheduleIdleAnimations();
+      } else {
+        window.addEventListener('load', scheduleIdleAnimations, { once: true });
+      }
+    </script>
+  </body>
+</html>

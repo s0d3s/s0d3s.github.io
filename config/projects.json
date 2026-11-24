@@ -1,0 +1,209 @@
+{
+  "siteOrigin": "https://s0d3s.github.io",
+  "githubOwner": "s0d3s",
+  "author": {
+    "name": "SoDeS",
+    "handle": "s0d3s",
+    "headlineRole": "Systems, Trading Platform & DevOps Architect · Team Lead",
+    "tagline": "Systems & Trading Platform Architect · Native OSS",
+    "summary": "Systems Architect, Trading Platform Architect, Engineering Team Lead, Quantitative Data Scientist, and DevOps Architect building zero-overhead low-latency execution platforms, real-time OS audio engines, native Rust/C++/Python infrastructure, and full-stack web platforms.",
+    "rolePills": [
+      "Systems Architect & Team Lead",
+      "Trading Platform Architect",
+      "Quantitative Data Scientist",
+      "DevOps & Platform Architect"
+    ],
+    "theses": [
+      {
+        "valuePrefix": "140k+ ",
+        "valueAccent": "Installs",
+        "label": "Monthly OSS Downloads · 340+ Dependent Repos"
+      },
+      {
+        "valuePrefix": "Zero-",
+        "valueAccent": "Overhead",
+        "label": "Ultra-Low-Latency Arch · Zero Wasted Ops"
+      },
+      {
+        "valuePrefix": "Polyglot ",
+        "valueAccent": "Core",
+        "label": "Rust · C++ · Python · Full-Stack Web"
+      },
+      {
+        "valuePrefix": "0 → ",
+        "valueAccent": "Production",
+        "label": "Architecture · Team Lead · DevOps/SRE"
+      }
+    ],
+    "jobTitles": [
+      "Systems Architect",
+      "Trading Platform Architect",
+      "Engineering Team Lead",
+      "DevOps Architect",
+      "Quantitative Data Scientist"
+    ],
+    "knowsAbout": [
+      "Trading Platforms & Real-Time Execution Architecture",
+      "Zero-Overhead Low-Latency Systems & Market Data Streaming",
+      "Systems Architecture & Engineering Team Leadership",
+      "Quantitative Data Science, Signal Processing & Statistical Modeling",
+      "DevOps Architecture, CI/CD Governance & High-Reliability Systems",
+      "Full-Stack Web Platforms & Modern TypeScript/Web UI",
+      "Rust",
+      "C++17",
+      "C11",
+      "Python",
+      "Cross-Platform Native Audio & DSP Engines"
+    ],
+    "pillars": [
+      {
+        "code": "01 // ARCHITECTURE & LEADERSHIP",
+        "title": "Systems Architect & Team Lead",
+        "description": "End-to-end technical ownership from 0-to-1 distributed and native systems architecture, strict ABI/API contracts, and engineering team leadership through production scale.",
+        "tags": ["Systems Architecture", "Team Leadership", "ABI Contracts"]
+      },
+      {
+        "code": "02 // TRADING PLATFORMS",
+        "title": "Trading Platform Architect",
+        "description": "Architecting deterministic event-driven trading and execution pipelines, market-data feed handlers, zero-allocation hot paths, lock-free SPSC rings, and tight tail-latency bounds.",
+        "tags": ["Trading Architecture", "0-Alloc Hot Paths", "Market Data"]
+      },
+      {
+        "code": "03 // QUANT & DATA SCIENCE",
+        "title": "Quantitative Data Scientist",
+        "description": "Non-parametric statistical modeling, time-series and signal pipelines, execution analytics, and zero-copy Python, NumPy, and native Rust/C++ compute bridges.",
+        "tags": ["Quant Data Science", "Signal Modeling", "Zero-Copy Python"]
+      },
+      {
+        "code": "04 // DEVOPS ARCHITECTURE",
+        "title": "DevOps & Platform Architect",
+        "description": "Designing multi-OS build and verification matrices, OIDC zero-secret release architecture, reproducible packaging, telemetry observability, and high-availability operations.",
+        "tags": ["DevOps Architecture", "OIDC Releases", "Production SRE"]
+      }
+    ],
+    "githubUrl": "https://github.com/s0d3s",
+    "pypiUrl": "https://pypi.org/user/s0d3s/",
+    "cratesIoUrl": "https://crates.io/users/s0d3s",
+    "contact": {
+      "email": "s0d3s.mail@gmail.com",
+      "showEmail": true,
+      "linkedinUrl": "",
+      "showLinkedin": false
+    }
+  },
+  "discovery": {
+    "defaultAdapter": "auto",
+    "excludeRepos": [
+      "s0d3s",
+      "s0d3s.github.io",
+      "tg-long-req",
+      "ats_friendly_resume",
+      "qwen-python",
+      "StableEchoRenderer"
+    ],
+    "excludeForks": true,
+    "excludeArchived": true,
+    "maxOssGridItems": 8
+  },
+  "projectOverrides": {
+    "capture-system-or-process-audio": {
+      "adapter": "auto",
+      "extraAdapters": ["rustdoc-roots"],
+      "rustdocCrates": [
+        "capture_system_or_process_audio",
+        "capture_system_or_process_audio_core",
+        "capture_system_or_process_audio_windows",
+        "capture_system_or_process_audio_linux",
+        "capture_system_or_process_audio_macos"
+      ],
+      "featuredOrder": 1,
+      "kicker": "Cross-Platform Audio Capture & Live PCM Mixer",
+      "successorOf": "PyAudioWPatch",
+      "installCommand": "pip install capture-system-or-process-audio",
+      "altInstallCommand": "cargo add capture-system-or-process-audio",
+      "pypiPackage": "capture-system-or-process-audio",
+      "cratesPackage": "capture-system-or-process-audio",
+      "platforms": [
+        "Windows 10/11 (WASAPI)",
+        "Linux (PipeWire & PulseAudio)",
+        "macOS 13+/14.2+ (Core Audio & SCK)"
+      ],
+      "highlights": [
+        "Captures system speaker output, isolated per-process/application trees, and microphones without virtual audio cables.",
+        "Zero steady-state heap allocations on real-time read_into paths across Python 3.11-3.15t (-Xgil=0), Safe Rust, C++17, and C11.",
+        "Built-in CspaMixer with <10 ms drift sync, polyphase resampling, TPDF dither, and live target hot-swap."
+      ]
+    },
+    "rusty-desktop-icons": {
+      "adapter": "auto",
+      "featuredOrder": 2,
+      "kicker": "Windows Desktop Icon Controller & HLSL GPU Animator",
+      "companionTo": "Positioner",
+      "installCommand": "pip install rusty-desktop-icons",
+      "altInstallCommand": "cargo add rusty-desktop-icons",
+      "pypiPackage": "rusty-desktop-icons",
+      "cratesPackage": "rusty-desktop-icons",
+      "platforms": ["Windows 10/11", "Rust", "Python"],
+      "highlights": [
+        "Programmatic Windows shell desktop icon layout inspection, persistence, and manipulation from Rust and Python.",
+        "GPU-accelerated procedural HLSL shader effects, baked motion curves, and real-time animation presets.",
+        "Full Sphinx API reference and step-by-step procedural animation recipes."
+      ]
+    },
+    "PyAudioWPatch": {
+      "gridOrder": 1,
+      "tier": "main",
+      "bentoSpan": "wide",
+      "pypiPackage": "PyAudioWPatch",
+      "installCommand": "pip install PyAudioWPatch",
+      "metricBadge": "140,000+ monthly PyPI installs · 340+ dependent repos",
+      "visual": {
+        "kind": "code-stage",
+        "stageTitle": "wasapi_loopback.py · WASAPI Shared PCM",
+        "stageCode": [
+          "import pyaudiowpatch as pyaudio",
+          "with pyaudio.PyAudio() as p:",
+          "    d = p.get_default_wasapi_loopback()",
+          "    s = p.open(rate=int(d['defaultSampleRate']), input=True,",
+          "        channels=d['maxInputChannels'], input_device_index=d['index'])"
+        ]
+      },
+      "successorRepo": "capture-system-or-process-audio",
+      "successorNote": "Need macOS, Linux, per-app isolation, Python 3.14t/3.15t, or Rust/C++?"
+    },
+    "Positioner": {
+      "gridOrder": 2,
+      "tier": "main",
+      "bentoSpan": "standard",
+      "metricBadge": "Native QML Windows GUI",
+      "visual": {
+        "kind": "animated-demo",
+        "sourceUrl": "https://raw.githubusercontent.com/s0d3s/Positioner/media_storage/distribution/main/main_presentation.gif",
+        "alt": "Positioner Windows desktop icon layout snapshot and restore live GUI demo",
+        "width": 250,
+        "height": 300,
+        "stageMetrics": ["Multi-Monitor Profiles", "1-Click Restore", "Windows 10/11"]
+      },
+      "successorRepo": "rusty-desktop-icons",
+      "successorNote": "Need programmable Rust/Python automation or HLSL shader animations?"
+    },
+    "SQLCipherMultiplatform": {
+      "gridOrder": 3,
+      "tier": "secondary",
+      "bentoSpan": "standard",
+      "metricBadge": "Kotlin Multiplatform & JVM/JDBC Cryptography",
+      "visual": {
+        "kind": "banner",
+        "sourceUrl": "https://raw.githubusercontent.com/s0d3s/SQLCipherMultiplatform/main/assets/SQLCipherMultiplatform_banner.png",
+        "alt": "SQLCipherMultiplatform encrypted SQLite for Kotlin Multiplatform and JDBC banner",
+        "width": 640,
+        "height": 284
+      }
+    },
+    "EchoNanny": {
+      "gridOrder": 4,
+      "tier": "utility",
+      "bentoSpan": "standard"
+    }
+  }
+}

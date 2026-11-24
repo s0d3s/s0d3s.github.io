@@ -1,0 +1,161 @@
+---
+import type { HostedPortal } from '../lib/types.ts';
+
+interface Props {
+  portal: HostedPortal;
+  eager?: boolean;
+}
+
+const { portal, eager = false } = Astro.props;
+const avifSrcset = `/generated/previews/${portal.previewSlug}-640.avif 640w, /generated/previews/${portal.previewSlug}-960.avif 960w`;
+const webpSrcset = `/generated/previews/${portal.previewSlug}-640.webp 640w, /generated/previews/${portal.previewSlug}-960.webp 960w`;
+const fallbackWebp = `/generated/previews/${portal.previewSlug}-960.webp`;
+const sizesAttr = '(max-width: 1024px) 92vw, 460px';
+
+const licenseLabel = 'MIT / Apache-2.0';
+const scopeSummary = portal.appliedExtraAdapters.includes('rustdoc-roots')
+  ? `${portal.programmingLanguages.length} SDK Bindings · Hosted Rustdoc & API Reference`
+  : `${portal.programmingLanguages.join(' & ')} SDKs · Full API Reference`;
+---
+
+<article class="monolith-card portal-showcase">
+  <div class="portal-media-col">
+    <a href={portal.docsUrl} class="portal-preview-frame">
+      <picture>
+        <source type="image/avif" srcset={avifSrcset} sizes={sizesAttr} />
+        <source type="image/webp" srcset={webpSrcset} sizes={sizesAttr} />
+        <img
+          src={fallbackWebp}
+          width="960"
+          height="480"
+          alt={`${portal.name} documentation portal preview`}
+          loading={eager ? 'eager' : 'lazy'}
+          fetchpriority={eager ? 'high' : 'auto'}
+          decoding={eager ? 'sync' : 'async'}
+          class="portal-preview-img"
+        />
+      </picture>
+    </a>
+
+    <div class="portal-adapter-meta">
+      <span class="adapter-tag">License: {licenseLabel}</span>
+      <span>{scopeSummary}</span>
+    </div>
+  </div>
+
+  <div class="portal-body-col">
+    <div class="portal-top-row">
+      <span class="portal-kicker">{portal.kicker}</span>
+      <div class="portal-badges">
+        {portal.version && <span class="badge-version">{portal.version}</span>}
+        {
+          portal.registries.pypi && (
+            <a href={portal.registries.pypi.url} class="badge-registry" rel="noopener">
+              PyPI {portal.registries.pypi.version} ↗
+            </a>
+          )
+        }
+        {
+          portal.registries.crates && (
+            <a href={portal.registries.crates.url} class="badge-registry" rel="noopener">
+              crates.io {portal.registries.crates.version} ↗
+            </a>
+          )
+        }
+      </div>
+    </div>
+
+    <div>
+      <h3 class="portal-name">
+        <a href={portal.docsUrl}>{portal.name}</a>
+      </h3>
+      <p class="portal-desc">{portal.description}</p>
+    </div>
+
+    <div class="chip-row">
+      {portal.platforms.map((plat) => <span class="spec-chip">{plat}</span>)}
+      {
+        portal.programmingLanguages.map((lang) => (
+          <span class="spec-chip">{lang}</span>
+        ))
+      }
+    </div>
+
+    {
+      portal.highlights.length > 0 && (
+        <ul class="portal-highlights">
+          {portal.highlights.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      (portal.installCommand || portal.altInstallCommand) && (
+        <div class="install-bars">
+          {portal.installCommand && (
+            <div class="install-box">
+              <code class="install-cmd">
+                <span class="install-prompt">$</span>
+                {portal.installCommand}
+              </code>
+              <button
+                type="button"
+                class="copy-btn"
+                data-copy={portal.installCommand}
+                aria-label={`Copy ${portal.installCommand}`}
+              >
+                Copy
+              </button>
+            </div>
+          )}
+          {portal.altInstallCommand && (
+            <div class="install-box">
+              <code class="install-cmd">
+                <span class="install-prompt">$</span>
+                {portal.altInstallCommand}
+              </code>
+              <button
+                type="button"
+                class="copy-btn"
+                data-copy={portal.altInstallCommand}
+                aria-label={`Copy ${portal.altInstallCommand}`}
+              >
+                Copy
+              </button>
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    {
+      portal.deepLinks.length > 0 && (
+        <div class="sitelinks-panel">
+          <div class="sitelinks-header">
+            <span class="sitelinks-label">Direct Documentation Sections</span>
+          </div>
+          <div class="sitelinks-grid">
+            {portal.deepLinks.map((link) => (
+              <a href={link.url} class="sitelink-pill">
+                <span>{link.label}</span>
+                <span class="sitelink-arrow" aria-hidden="true">→</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    <div class="portal-cta-row">
+      <a href={portal.docsUrl} class="btn-primary">
+        Open Documentation Portal →
+      </a>
+      <a href={portal.repoUrl} class="btn-secondary" rel="noopener">
+        GitHub Repository ↗
+      </a>
+    </div>
+  </div>
+</article>
+    

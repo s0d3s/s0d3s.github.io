@@ -1,0 +1,177 @@
+---
+import type { TechnicalIndexData } from '../lib/types.ts';
+
+interface Props {
+  data: TechnicalIndexData;
+}
+
+const { data } = Astro.props;
+---
+
+<section id="technical-index" class="section-block" aria-labelledby="technical-index-heading">
+  <div class="section-head">
+    <div>
+      <span class="section-index">04 // Technical Matrix &amp; Deep-Dive Index</span>
+      <h2 id="technical-index-heading" class="section-title">
+        Workload Routing &amp; Architecture Directory
+      </h2>
+    </div>
+    <p class="section-subtitle">
+      Capability matrix across native audio engines, desktop GPU shaders, and multiplatform
+      cryptography — paired with direct entry points into OS backend manuals, DSP internals, and
+      hosted Rustdoc crates.
+    </p>
+  </div>
+
+  <!-- PART A: Hardware-Datasheet Project -> Workload Selection Matrix -->
+  <div class="monolith-card matrix-card">
+    <div class="matrix-topbar">
+      <span class="matrix-kicker">Systems Selection Datasheet</span>
+      <span class="matrix-meta">{data.matrixRows.length} Projects · Workload &amp; Substrate Routing</span>
+    </div>
+
+    <div class="matrix-table-wrap">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th scope="col">Project / Target</th>
+            <th scope="col">Primary Workload &amp; Scope</th>
+            <th scope="col">OS &amp; Native Substrate</th>
+            <th scope="col">Bindings &amp; Guarantees</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            data.matrixRows.map((row) => {
+              const isExternal = row.primaryKind === 'repo';
+              return (
+                <tr>
+                  <td class="matrix-col-target" data-label="Project">
+                    <a
+                      href={row.primaryUrl}
+                      class="matrix-target-tile"
+                      rel={isExternal ? 'noopener' : undefined}
+                    >
+                      <span class="matrix-target-main">
+                        <span class="matrix-target-name">{row.projectName}</span>
+                        <span class="matrix-target-sub">
+                          {row.version && <span class="matrix-target-ver">{row.version}</span>}
+                          {row.version && <span aria-hidden="true">·</span>}
+                          <span>{isExternal ? 'GitHub Repo' : 'Docs Portal'}</span>
+                        </span>
+                      </span>
+                      <span class="matrix-target-arrow" aria-hidden="true">
+                        {isExternal ? '↗' : '→'}
+                      </span>
+                    </a>
+                  </td>
+                  <td class="matrix-col-workload" data-label="Workload">
+                    <span class="matrix-workload-text">{row.workload}</span>
+                  </td>
+                  <td class="matrix-col-substrate" data-label="Substrate">
+                    <span class="matrix-substrate-text">{row.substrate}</span>
+                  </td>
+                  <td class="matrix-col-caps" data-label="Bindings">
+                    <div class="matrix-caps-row">
+                      {row.capabilities.map((cap) => (
+                        <span class="spec-chip">{cap}</span>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Sub-block divider inside Section 04 (distinct from top-level 01..04 section headers) -->
+  <div class="subsection-divider" role="separator" aria-label="Deep-dive documentation by project">
+    <span class="subsection-divider-line" aria-hidden="true"></span>
+    <span class="subsection-divider-label">Deep-Dive Documentation by Project</span>
+    <span class="subsection-divider-line" aria-hidden="true"></span>
+  </div>
+
+  <!-- PART B: Product-Scoped Deep-Dive Containers (8 + 4 Split) -->
+  <div class="product-dir-grid">
+    {
+      data.productPanels.map((panel) => {
+        const isMultiTrack = panel.tracks.length > 1;
+        return (
+          <article
+            class:list={[
+              'monolith-card',
+              'product-dir-card',
+              panel.span === 'wide' ? 'product-dir-wide' : 'product-dir-narrow',
+              panel.accent === 'ice' ? 'product-accent-ice' : 'product-accent-amber',
+            ]}
+          >
+            <div class="product-dir-topbar">
+              <div class="product-dir-identity">
+                <span
+                  class:list={[
+                    'product-dir-dot',
+                    panel.accent === 'ice' ? 'dot-ice' : 'dot-amber',
+                  ]}
+                  aria-hidden="true"
+                />
+                <h3 class="product-dir-name">
+                  <a href={panel.docsUrl}>
+                    <span>{panel.projectName}</span>
+                    <span class="product-dir-name-arrow" aria-hidden="true">
+                      →
+                    </span>
+                  </a>
+                </h3>
+                {panel.version && <span class="matrix-version-pill">{panel.version}</span>}
+              </div>
+
+              <span class="product-dir-domain">{panel.domainBadge}</span>
+            </div>
+
+            <div class:list={['product-tracks', { 'product-tracks-split': isMultiTrack }]}>
+              {panel.tracks.map((track) => (
+                <div class="product-track-col">
+                  <h4 class="product-track-heading">{track.heading}</h4>
+                  <ul class="deep-dive-list">
+                    {track.links.map((item) => (
+                      <li>
+                        <a href={item.url} class="deep-dive-link">
+                          <span class="deep-dive-link-main">
+                            <span class="deep-dive-link-label">{item.label}</span>
+                            <span class="deep-dive-link-meta">{item.meta}</span>
+                          </span>
+                          <span class="deep-dive-arrow" aria-hidden="true">
+                            →
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+
+            {panel.footerPills.length > 0 && (
+              <div class="product-dir-footer">
+                <span class="rustdoc-strip-label">{panel.footerLabel}</span>
+                <div class="rustdoc-pill-row">
+                  {panel.footerPills.map((pill) => (
+                    <a href={pill.url} class="rustdoc-pill" title={pill.title}>
+                      <span>{pill.label}</span>
+                      <span class="rustdoc-pill-arrow" aria-hidden="true">
+                        {pill.external ? '↗' : '→'}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </article>
+        );
+      })
+    }
+  </div>
+</section>

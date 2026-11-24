@@ -1,0 +1,22 @@
+# Build outputs & framework caches
+dist/
+.astro/
+node_modules/
+
+# Generated build-time rasterized assets, favicons & OG card
+public/generated/
+public/og-card-1280x640.png
+public/favicon.ico
+public/favicon-48x48.png
+public/favicon-96x96.png
+public/favicon-192x192.png
+public/favicon-512x512.png
+public/apple-touch-icon.png
+.cache/
+
+# Environment & OS files
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db

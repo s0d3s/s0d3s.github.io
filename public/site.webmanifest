@@ -1,0 +1,21 @@
+{
+  "name": "SoDeS (@s0d3s) — Systems & Trading Platform Architect",
+  "short_name": "s0d3s",
+  "description": "Systems, Trading Platform & DevOps Architect, Team Lead, and Quantitative Data Scientist — open-source hub for capture-system-or-process-audio and PyAudioWPatch.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050507",
+  "theme_color": "#050507",
+  "icons": [
+    {
+      "src": "/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

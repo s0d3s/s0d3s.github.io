@@ -1,0 +1,60 @@
+---
+import { loadDiscoverySnapshot } from '../lib/snapshot.ts';
+import '../styles/global.css';
+
+const snapshot = loadDiscoverySnapshot();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="robots" content="noindex" />
+    <title>404 — Page Not Found | s0d3s.github.io</title>
+    <link rel="icon" href="/favicon.ico" sizes="48x48 96x96" />
+    <link rel="icon" type="image/png" href="/favicon-48x48.png" sizes="48x48" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <div class="abyss-backdrop" aria-hidden="true">
+      <div class="abyss-grid"></div>
+      <div class="abyss-aura"></div>
+    </div>
+
+    <div class="page-shell">
+      <main class="container" style="padding: 5rem 1.5rem; max-width: 48rem;">
+        <div class="monolith-card" style="padding: 2.25rem;">
+          <span class="section-index">HTTP 404 // Unmapped Route</span>
+          <h1 class="section-title" style="margin-bottom: 0.75rem;">
+            That path does not exist on s0d3s.github.io
+          </h1>
+          <p class="portal-desc" style="margin-bottom: 1.5rem;">
+            Jump back to the root hub or open one of the active documentation portals below:
+          </p>
+
+          <div class="sitelinks-grid" style="margin-bottom: 1.75rem;">
+            {
+              snapshot.hostedPortals.map((portal) => (
+                <a href={portal.docsUrl} class="sitelink-pill">
+                  <span>{portal.name}</span>
+                  <span class="sitelink-arrow" aria-hidden="true">→</span>
+                </a>
+              ))
+            }
+          </div>
+
+          <div class="portal-cta-row">
+            <a href="/" class="btn-primary">Return to s0d3s.github.io Hub →</a>
+            <a href={snapshot.author.githubUrl} class="btn-secondary" rel="noopener">
+              GitHub @{snapshot.author.handle} ↗
+            </a>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

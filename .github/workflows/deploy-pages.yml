@@ -1,0 +1,123 @@
+name: Deploy Domain Hub Site
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "23 4 */2 * *"
+  workflow_dispatch:
+    inputs:
+      deploy_to_pages:
+        description: "Deploy verified site to GitHub Pages (uncheck for dry-run artifact preview only)"
+        required: false
+        default: true
+        type: boolean
+      refresh_dynamic:
+        description: "Fetch live dynamic telemetry (stars, forks, updatedAt, PyPI & crates.io versions) during build"
+        required: false
+        default: true
+        type: boolean
+      artifact_retention_days:
+        description: "Days to retain downloadable site preview artifact (default: 7)"
+        required: false
+        type: number
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-domain-hub
+  cancel-in-progress: false
+
+env:
+  ASTRO_TELEMETRY_DISABLED: "1"
+
+jobs:
+  build-and-verify:
+    name: Sync Dynamic Telemetry, Build & Verify Static Hub
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js 26 LTS
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "26"
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Refresh dynamic repository & registry telemetry (stars, forks, versions)
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.refresh_dynamic }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node ./scripts/sync-dynamic.mjs --fallback-on-offline
+
+      - name: Build optimized AVIF/WebP assets and static Astro bundle (with live telemetry)
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.refresh_dynamic }}
+        run: npm run build:bundle
+
+      - name: Build static Astro bundle from committed baseline only (manual offline dry-run)
+        if: ${{ github.event_name == 'workflow_dispatch' && !inputs.refresh_dynamic }}
+        run: npm run build:offline
+
+      - name: Run linter, strict TypeScript checks, unit tests, and built-site SEO/GEO verifier
+        run: |
+          npm run check
+          npm test
+          npm run verify
+
+      - name: Upload downloadable hub-site-preview artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: hub-site-preview
+          path: dist
+          if-no-files-found: error
+          retention-days: ${{ inputs.artifact_retention_days || 7 }}
+
+      - name: Configure GitHub Pages
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_to_pages }}
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+
+      - name: Upload GitHub Pages deployment artifact
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_to_pages }}
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: dist
+
+  deploy-pages:
+    name: Deploy to GitHub Pages (OIDC)
+    needs: build-and-verify
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_to_pages }}
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy artifact to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+      - name: Write deployment summary
+        shell: bash
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          {
+            echo "## Domain Hub Deployed"
+            echo ""
+            echo "- **Live Root URL:** ${PAGE_URL}"
+            echo "- **Federated Sitemap Index:** ${PAGE_URL}sitemap-index.xml"
+            echo "- **Unified Robots Rules:** ${PAGE_URL}robots.txt"
+            echo "- **LLM Documentation Router:** ${PAGE_URL}llms.txt"
+            echo "- **Full Portfolio LLM Dossier:** ${PAGE_URL}llms-full.txt"
+          } >> "${GITHUB_STEP_SUMMARY}"
