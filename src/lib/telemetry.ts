@@ -30,6 +30,21 @@ function mergeRegistries(base: RegistryInfo, dyn?: RegistryInfo): RegistryInfo {
   };
 }
 
+export function dedupeLabels(items: readonly string[]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of items) {
+    const trimmed = raw.trim();
+    if (!trimmed) continue;
+    const key = trimmed.toLowerCase();
+    if (!seen.has(key)) {
+      seen.add(key);
+      out.push(trimmed);
+    }
+  }
+  return out;
+}
+
 function applyPortalConfigAndTelemetry(
   portal: HostedPortal,
   override: ProjectOverrideConfig | undefined,
@@ -39,10 +54,16 @@ function applyPortalConfigAndTelemetry(
   const version =
     dyn?.version ?? registries.pypi?.version ?? registries.crates?.version ?? portal.version;
 
+  const programmingLanguages = dedupeLabels(portal.programmingLanguages);
+  const langKeys = new Set(programmingLanguages.map((l) => l.toLowerCase()));
+  const rawPlatforms = dedupeLabels(override?.platforms ?? portal.platforms);
+  const platforms = rawPlatforms.filter((plat) => !langKeys.has(plat.toLowerCase()));
+
   return {
     ...portal,
     ...(override?.kicker ? { kicker: override.kicker } : {}),
-    ...(override?.platforms ? { platforms: override.platforms } : {}),
+    platforms,
+    programmingLanguages,
     ...(override?.highlights ? { highlights: override.highlights } : {}),
     ...(override?.installCommand ? { installCommand: override.installCommand } : {}),
     ...(override?.altInstallCommand ? { altInstallCommand: override.altInstallCommand } : {}),

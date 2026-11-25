@@ -444,6 +444,27 @@ export async function verifyBuiltDist(
       }
     }
 
+    // Ensure zero duplicate spec-chip pills inside any single .chip-row
+    for (const rowMatch of html.matchAll(
+      /<div\b[^>]*class=["'][^"']*\bchip-row\b[^"']*["'][^>]*>([\s\S]*?)<\/div>/gi,
+    )) {
+      const seenChips = new Set<string>();
+      for (const chipMatch of (rowMatch[1] ?? '').matchAll(
+        /<span\b[^>]*class=["'][^"']*\bspec-chip\b[^"']*["'][^>]*>([\s\S]*?)<\/span>/gi,
+      )) {
+        const label = stripHtmlTags(chipMatch[1] ?? '').trim();
+        const key = label.toLowerCase();
+        if (key && seenChips.has(key)) {
+          issues.push({
+            code: 'duplicate_spec_chip',
+            file: 'index.html',
+            message: `Duplicate spec-chip tag '${label}' found inside a single .chip-row.`,
+          });
+        }
+        if (key) seenChips.add(key);
+      }
+    }
+
     // Ensure zero client-side external API requests in executable <script> blocks
     for (const scriptMatch of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
       const attrs = parseTagAttributes(scriptMatch[1] ?? '');

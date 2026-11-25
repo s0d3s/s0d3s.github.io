@@ -143,7 +143,7 @@
       "altInstallCommand": "cargo add rusty-desktop-icons",
       "pypiPackage": "rusty-desktop-icons",
       "cratesPackage": "rusty-desktop-icons",
-      "platforms": ["Windows 10/11", "Rust", "Python"],
+      "platforms": ["Windows 10/11", "Direct3D 11 / HLSL"],
       "highlights": [
         "Programmatic Windows shell desktop icon layout inspection, persistence, and manipulation from Rust and Python.",
         "GPU-accelerated procedural HLSL shader effects, baked motion curves, and real-time animation presets.",

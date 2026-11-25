@@ -1,4 +1,5 @@
 ---
+import { dedupeLabels } from '../lib/telemetry.ts';
 import type { HostedPortal } from '../lib/types.ts';
 
 interface Props {
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const { portal, eager = false } = Astro.props;
+const specChips = dedupeLabels([...portal.platforms, ...portal.programmingLanguages]);
 const avifSrcset = `/generated/previews/${portal.previewSlug}-640.avif 640w, /generated/previews/${portal.previewSlug}-960.avif 960w`;
 const webpSrcset = `/generated/previews/${portal.previewSlug}-640.webp 640w, /generated/previews/${portal.previewSlug}-960.webp 960w`;
 const fallbackWebp = `/generated/previews/${portal.previewSlug}-960.webp`;
@@ -73,12 +75,7 @@ const scopeSummary = portal.appliedExtraAdapters.includes('rustdoc-roots')
     </div>
 
     <div class="chip-row">
-      {portal.platforms.map((plat) => <span class="spec-chip">{plat}</span>)}
-      {
-        portal.programmingLanguages.map((lang) => (
-          <span class="spec-chip">{lang}</span>
-        ))
-      }
+      {specChips.map((chip) => <span class="spec-chip">{chip}</span>)}
     </div>
 
     {

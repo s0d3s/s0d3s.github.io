@@ -246,7 +246,7 @@
       "version": "v0.2.30",
       "primaryLanguage": "Rust",
       "programmingLanguages": ["Rust", "Python"],
-      "platforms": ["Windows 10/11", "Rust", "Python"],
+      "platforms": ["Windows 10/11", "Direct3D 11 / HLSL"],
       "topics": [
         "automation",
         "desktop",

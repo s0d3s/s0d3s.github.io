@@ -323,10 +323,15 @@ describe('Built-Site Verifier & Negative Controls', () => {
       const indexHtml = await fs.readFile(path.join(tmpDir, 'index.html'), 'utf-8');
       await fs.writeFile(
         path.join(tmpDir, 'index.html'),
-        indexHtml.replace(
-          '</head>',
-          '<link rel="icon" type="image/svg+xml" href="/bad.svg" /><link rel="icon" type="image/png" href="/favicon-48x48.png" sizes="32x32" /><script>fetch("https://api.github.com/users/s0d3s/repos")</script></head>',
-        ),
+        indexHtml
+          .replace(
+            '</head>',
+            '<link rel="icon" type="image/svg+xml" href="/bad.svg" /><link rel="icon" type="image/png" href="/favicon-48x48.png" sizes="32x32" /><script>fetch("https://api.github.com/users/s0d3s/repos")</script></head>',
+          )
+          .replace(
+            '</body>',
+            '<div class="chip-row"><span class="spec-chip">Rust</span><span class="spec-chip">Rust</span></div></body>',
+          ),
         'utf-8',
       );
       const negIssues = await verifyBuiltDist(tmpDir);
@@ -339,6 +344,7 @@ describe('Built-Site Verifier & Negative Controls', () => {
       expect(codes).toContain('svg_favicon_forbidden_for_google_seo');
       expect(codes).toContain('favicon_size_below_48px');
       expect(codes).toContain('client_side_api_request_forbidden');
+      expect(codes).toContain('duplicate_spec_chip');
     } finally {
       await fs.rm(tmpDir, { recursive: true, force: true });
     }

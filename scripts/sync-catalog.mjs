@@ -287,13 +287,18 @@ async function main() {
         ...(version ? { version } : {}),
         ...(repo.language ? { primaryLanguage: repo.language } : {}),
         programmingLanguages,
-        platforms:
+        platforms: (
           override?.platforms ??
           (topics.includes('cross-platform')
             ? ['Windows', 'Linux', 'macOS']
             : topics.includes('windows')
               ? ['Windows']
-              : []),
+              : [])
+        ).filter(
+          (plat, idx, arr) =>
+            arr.findIndex((x) => x.toLowerCase() === plat.toLowerCase()) === idx &&
+            !programmingLanguages.some((l) => l.toLowerCase() === plat.toLowerCase()),
+        ),
         topics,
         stars: Number(repo.stargazers_count ?? 0),
         forks: Number(repo.forks_count ?? 0),
